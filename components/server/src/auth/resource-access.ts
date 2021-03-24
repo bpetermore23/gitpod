@@ -4,7 +4,7 @@
  * See License-AGPL.txt in the project root for license information.
  */
 
-import { Workspace, WorkspaceInstance, User, Snapshot, GitpodToken, Token } from "@gitpod/gitpod-protocol";
+import { GitpodToken, Snapshot, Token, User, UserEnvVar, Workspace, WorkspaceInstance } from "@gitpod/gitpod-protocol";
 
 declare var resourceInstance: GuardedResource;
 export type GuardedResourceKind = typeof resourceInstance.kind;
@@ -17,8 +17,9 @@ export type GuardedResource =
     GuardedGitpodToken |
     GuardedToken |
     GuardedUserStorage |
-    GuardedContentBlob
-;
+    GuardedContentBlob |
+    GuardEnvVar
+    ;
 
 export interface GuardedWorkspace {
     kind: "workspace";
@@ -56,6 +57,11 @@ export interface GuardedContentBlob {
     name: string;
 }
 
+export interface GuardEnvVar {
+    kind: "envVar";
+    subject: UserEnvVar;
+}
+
 export interface GuardedGitpodToken {
     kind: "gitpodToken";
     subject: GitpodToken;
@@ -70,9 +76,9 @@ export interface GuardedToken {
 export type ResourceAccessOp =
     "create" |
     "update" |
-    "get"    |
+    "get" |
     "delete"
-;
+    ;
 
 export const ResourceAccessGuard = Symbol("ResourceAccessGuard");
 
@@ -89,8 +95,8 @@ export interface WithResourceAccessGuard {
  * CompositeResourceAccessGuard grants access to resources if at least one of its children does.
  */
 export class CompositeResourceAccessGuard implements ResourceAccessGuard {
-    
-    constructor(protected readonly children: ResourceAccessGuard[]) {}
+
+    constructor(protected readonly children: ResourceAccessGuard[]) { }
 
     async canAccess(resource: GuardedResource, operation: ResourceAccessOp): Promise<boolean> {
         // if a single guard permitts access, we're good to go
@@ -105,7 +111,7 @@ export class CompositeResourceAccessGuard implements ResourceAccessGuard {
  */
 export class OwnerResourceGuard implements ResourceAccessGuard {
 
-    constructor(readonly userId: string) {}
+    constructor(readonly userId: string) { }
 
     async canAccess(resource: GuardedResource, operation: ResourceAccessOp): Promise<boolean> {
         switch (resource.kind) {
@@ -125,6 +131,8 @@ export class OwnerResourceGuard implements ResourceAccessGuard {
                 return resource.subject.ownerId === this.userId;
             case "workspaceInstance":
                 return resource.workspaceOwnerID === this.userId;
+            case "envVar":
+                return resource.subject.userId === this.userId;
         }
     }
 
@@ -144,11 +152,13 @@ export class SharedWorkspaceAccessGuard implements ResourceAccessGuard {
     }
 }
 
-export class ScopedResourceGuard implements ResourceAccessGuard {
-    protected readonly scopes: { [index: string]: ScopedResourceGuard.ResourceScope } = {};
+export class ScopedResourceGuard<K extends GuardedResourceKind = GuardedResourceKind> implements ResourceAccessGuard {
+    private readonly scopes = new Map<string, Set<ResourceAccessOp>>();
 
-    constructor(scopes: ScopedResourceGuard.ResourceScope[], protected readonly delegate?: ResourceAccessGuard) {
-        scopes.forEach(s => this.scopes[`${s.kind}::${s.subjectID}`] = s);
+    constructor(scopes: ScopedResourceGuard.ResourceScope<K>[], protected readonly delegate?: ResourceAccessGuard) {
+        for (const scope of scopes) {
+            this.pushScope(scope);
+        }
     }
 
     async canAccess(resource: GuardedResource, operation: ResourceAccessOp): Promise<boolean> {
@@ -157,17 +167,49 @@ export class ScopedResourceGuard implements ResourceAccessGuard {
             return false;
         }
 
-        const defaultScope = this.scopes[`${resource.kind}::*`];
-        if (!!this.delegate && !!defaultScope && defaultScope.operations.some(op => op === operation)) {
-            return await this.delegate.canAccess(resource, operation);
+        if (this.delegate && this.hasScope(`${resource.kind}::*`, operation)) {
+            return this.delegate.canAccess(resource, operation);
         }
 
-        const scope = this.scopes[`${resource.kind}::${subjectID}`];
-        if (!scope) {
+        return this.hasScope(`${resource.kind}::${subjectID}`, operation);
+    }
+
+    private hasScope(scope: string, operation: ResourceAccessOp): boolean {
+        return !!this.scopes.get(scope)?.has(operation);
+    }
+
+    protected pushScope(scope: ScopedResourceGuard.ResourceScope<K>): void {
+        this.scopes.set(`${scope.kind}::${scope.subjectID}`, new Set(scope.operations));
+    }
+
+}
+
+export class WorkspaceEnvVarAccessGuard extends ScopedResourceGuard<'envVar'> {
+
+    private readAccessWildcardPatterns: Set<string> | undefined;
+
+    async canAccess(resource: GuardedResource, operation: ResourceAccessOp): Promise<boolean> {
+        if (resource.kind !== 'envVar') {
             return false;
         }
+        // allow read access based on wildcard repo patterns matching
+        if (operation === 'get' && this.readAccessWildcardPatterns?.has(resource.subject.repositoryPattern)) {
+            return true;
+        }
+        // but mutations only based on exact matching
+        return super.canAccess(resource, operation);
+    }
 
-        return scope.operations.some(op => op === operation);
+    protected pushScope(scope: ScopedResourceGuard.ResourceScope<'envVar'>): void {
+        super.pushScope(scope);
+        if (!scope.operations.includes('get')) {
+            return;
+        }
+        const [owner, repo] = UserEnvVar.splitRepositoryPattern(scope.subjectID);
+        this.readAccessWildcardPatterns = this.readAccessWildcardPatterns || new Set<string>();
+        this.readAccessWildcardPatterns.add('*/*');
+        this.readAccessWildcardPatterns.add(`${owner}/*`);
+        this.readAccessWildcardPatterns.add(`*/${repo}`);
     }
 
 }
@@ -176,10 +218,13 @@ export namespace ScopedResourceGuard {
 
     export const SNAPSHOT_WORKSPACE_SUBJECT_ID_PREFIX = 'ws-'
 
-    export interface ResourceScope {
-        kind: GuardedResourceKind;
+    export interface ResourceScope<K extends GuardedResourceKind = GuardedResourceKind> {
+        kind: K;
         subjectID: string;
         operations: ResourceAccessOp[];
+    }
+    export function ofKind<K extends GuardedResourceKind>(scope: ResourceScope, kind: K): scope is ResourceScope<K> {
+        return scope.kind === kind;
     }
 
     export function isAllowedUnder(parent: ResourceScope, child: ResourceScope): boolean {
@@ -250,6 +295,8 @@ export namespace ScopedResourceGuard {
                 return resource.subject.id;
             case "workspaceInstance":
                 return resource.subject ? resource.subject.id : undefined;
+            case "envVar":
+                return resource.subject.repositoryPattern;
         }
     }
 }
@@ -265,7 +312,22 @@ export class TokenResourceGuard implements ResourceAccessGuard {
             this.delegate = ownerResourceGuard;
         } else {
             const resourceScopes = TokenResourceGuard.getResourceScopes(allTokenScopes);
-            this.delegate = new ScopedResourceGuard(resourceScopes, ownerResourceGuard);
+            const envVarScopes: ScopedResourceGuard.ResourceScope<'envVar'>[] = [];
+            const otherScopes: ScopedResourceGuard.ResourceScope[] = [];
+            for (const scope of resourceScopes) {
+                if (ScopedResourceGuard.ofKind(scope, 'envVar')) {
+                    envVarScopes.push(scope);
+                } else {
+                    otherScopes.push(scope);
+                }
+            }
+            this.delegate = new ScopedResourceGuard(otherScopes, ownerResourceGuard)
+            if (envVarScopes.length) {
+                this.delegate = new CompositeResourceAccessGuard([
+                    new WorkspaceEnvVarAccessGuard(envVarScopes, ownerResourceGuard),
+                    this.delegate
+                ]);
+            }
         }
     }
 
@@ -280,12 +342,12 @@ export class TokenResourceGuard implements ResourceAccessGuard {
 }
 
 export namespace TokenResourceGuard {
-    
+
     export const DefaultResourceScope = "resource:default";
 
     export function getResourceScopes(s: string[]): ScopedResourceGuard.ResourceScope[] {
         return s.filter(s => s.startsWith("resource:") && s !== DefaultResourceScope)
-                .map(s => ScopedResourceGuard.unmarshalResourceScope(s.substring("resource:".length)));
+            .map(s => ScopedResourceGuard.unmarshalResourceScope(s.substring("resource:".length)));
     }
 
     export function areScopesSubsetOf(upperScopes: string[], lowerScopes: string[]) {
