@@ -276,7 +276,7 @@ function GitProviders() {
                         <span className="my-auto truncate text-gray-500 overflow-ellipsis">{getPermissions(ap.authProviderId)?.join(", ") || "–"}</span>
                         <span className="text-sm my-auto text-gray-400">Permissions</span>
                     </div>
-                    <div className="my-auto flex w-1/12 pl-8">
+                    <div className="my-auto flex w-1/12 pl-8 mr-4">
                         <div className="self-center hover:bg-gray-200 rounded-md cursor-pointer w-8">
                             <ContextMenu menuEntries={gitProviderMenu(ap)}>
                                 <img className="w-8 h-8 p-1" src={ThreeDots} alt="Actions" />
@@ -363,7 +363,7 @@ function GitIntegrations() {
                 <div className="m-auto text-center">
                     <h3 className="self-center text-gray-500 mb-4">No Git Integrations</h3>
                     <div className="text-gray-500 mb-6">In addition to the default Git Providers you can authorize<br /> with a self hosted instace of a provider.</div>
-                    <button className="self-center" onClick={() => setModal({ mode: "new" })}>New Git Integration</button>
+                    <button className="self-center" onClick={() => setModal({ mode: "new" })}>New Integration</button>
                 </div>
             </div>
         )}
@@ -584,7 +584,7 @@ function GitIntegrationModal(props: ({
                 <div className="w-full relative">
                     <input name="redirectURL" disabled={true} readOnly={true} type="text" value={redirectURL} className="rounded-md w-full truncate pr-8" />
                     <div className="cursor-pointer" onClick={() => copyRedirectUrl()}>
-                        <img src={copy} title="Copy the Redirect URL to clippboard." className="absolute top-1/3 right-3" />
+                        <img src={copy} title="Copy the Redirect URL to clippboard" className="absolute top-1/3 right-3" />
                     </div>
                 </div>
                 <span className="text-gray-500 text-sm">{getRedirectUrlDescription(type, host)}</span>
