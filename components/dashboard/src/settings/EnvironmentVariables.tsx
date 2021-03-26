@@ -50,12 +50,12 @@ function AddEnvVarModal(p: EnvVarModalProps) {
     };
 
     return <Modal visible={true} onClose={p.onClose} onEnter={save}>
-        <h3 className="pb-2">{isNew ? 'New' : 'Edit'} Variable</h3>
-        <div className="border-t -mx-6 px-6 py-2 flex flex-col">
-            {error ? <div className="bg-gitpod-kumquat-light rounded-md p-3 text-red-500 text-sm">
+        <h3 className="mb-4">{isNew ? 'New' : 'Edit'} Variable</h3>
+        <div className="border-t border-b -mx-6 px-6 py-4 flex flex-col">
+            {error ? <div className="bg-gitpod-kumquat-light rounded-md p-3 text-red-500 text-sm mb-2">
                 {error}
             </div> : null}
-            <div className="mt-4">
+            <div>
                 <h4>Name</h4>
                 <input className="w-full" type="text" value={ev.name} onChange={(v) => { update({name: v.target.value}) }} />
             </div>
@@ -68,8 +68,8 @@ function AddEnvVarModal(p: EnvVarModalProps) {
                 <input className="w-full" type="text" value={ev.repositoryPattern} placeholder="e.g. org/project" 
                     onChange={(v) => { update({repositoryPattern: v.target.value}) }} />
             </div>
-            <div className="mt-3">
-                <p>You can pass a variable for a specific project or use wildcard characters (<span className="text-gitpod-kumquat-dark bg-gitpod-kumquat-light px-1 py-0.5 rounded-md text-sm font-mono">*/*</span>) to make it available in more projects.</p>
+            <div className="mt-1">
+                <p className="text-gray-500">You can pass a variable for a specific project or use wildcard characters (<span className="text-gitpod-kumquat-dark bg-gitpod-kumquat-light px-1 py-0.5 rounded-md text-sm font-mono">*/*</span>) to make it available in more projects.</p>
             </div>
         </div>
         <div className="flex justify-end mt-6">
@@ -147,14 +147,14 @@ export default function EnvVars() {
             envVar={currentEnvVar}
             validate={validate}
             onClose={() => setAddEnvVarModalVisible(false)} /> : null}
-        <div className="sm:flex sm:items-center sm:justify-between mb-2">
+        <div className="flex items-start sm:justify-between mb-2">
             <div>
                 <h3>Environment Variables</h3>
-                <h2 className="text-gray-500">Variables are used to store information like passwordsgit .</h2>
+                <h2 className="text-gray-500">Variables are used to store information like passwords.</h2>
             </div>
             {envVars.length !== 0
             ?
-            <div className="mt-3 flex sm:mt-0 sm:ml-4">
+            <div className="mt-3 flex mt-0">
                 <button onClick={add} className="ml-2 font-medium">New Variable</button>
             </div>
             : null}

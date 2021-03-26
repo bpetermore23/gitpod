@@ -21,7 +21,7 @@
         @apply text-2xl text-gray-800 leading-9 font-semibold;
     }
     h4 {
-        @apply pb-2 text-sm font-medium text-gray-600;
+        @apply pb-2 text-sm font-semibold text-gray-600;
     }
     p {
         @apply text-sm text-gray-400;
@@ -43,7 +43,7 @@
     }
 
     input[type=text] {
-        @apply text-xs block w-56 text-sm text-gray-600 rounded-md border-2 border-gray-400 focus:border-gray-500 focus:bg-white focus:ring-0;
+        @apply block w-56 text-gray-600 rounded-md border-2 border-gray-400 focus:border-gray-500 focus:bg-white focus:ring-0;
     }
 
     input[type=text]::placeholder {
