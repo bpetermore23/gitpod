@@ -112,13 +112,13 @@ export function WorkspaceEntry({ desc, model }: { desc: WorkspaceInfo, model: Wo
             </div>
             <div className="flex w-4/12 truncate overflow-ellipsis">
                 <div className="flex flex-col">
-                    <div className="font-medium text-gray-500 overflow-ellipsis truncate">{ws.description}</div>
+                    <div className="text-gray-500 overflow-ellipsis truncate">{ws.description}</div>
                     <div className="text-sm text-gray-400 overflow-ellipsis truncate">{ws.contextURL}</div>
                 </div>
             </div>
             <div className="flex w-2/12 truncate" onClick={numberOfChanges > 0 ? showChanges : undefined}>
                 <div className="flex flex-col">
-                    <div className="font-medium text-gray-500 truncate">{currentBranch}</div>
+                    <div className="text-gray-500 truncate">{currentBranch}</div>
                     {
                         numberOfChanges > 0 ?
                             <div className={"text-sm text-red-600 truncate cursor-pointer bg-red-50 group-hover:bg-red-100 hover:text-red-800 px-1.5 py-0.5 relative rounded-md -top-0.5"} onClick={showChanges}>{changesLabel}</div>
