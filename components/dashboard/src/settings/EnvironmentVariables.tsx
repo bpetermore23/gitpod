@@ -69,7 +69,7 @@ function AddEnvVarModal(p: EnvVarModalProps) {
                     onChange={(v) => { update({repositoryPattern: v.target.value}) }} />
             </div>
             <div className="mt-1">
-                <p className="text-gray-500">You can pass a variable for a specific project or use wildcard charactergit dif (<span className="text-gray--300 bg-gray-100 px-1.5 py-1 rounded-md text-sm font-mono font-medium">*/*</span>) to make it available in more projects.</p>
+                <p className="text-gray-500">You can pass a variable for a specific project or use wildcard character (<span className="text-gray--300 bg-gray-100 px-1.5 py-1 rounded-md text-sm font-mono font-medium">*/*</span>) to make it available in more projects.</p>
             </div>
         </div>
         <div className="flex justify-end mt-6">
