@@ -146,7 +146,10 @@ export class Workspaces extends React.Component<WorkspacesProps, WorkspacesState
                             <div className="flex flex-col items-center w-96 m-auto">
                                 <h3 className="text-center pb-3 text-gray-500">No Active Workspaces</h3>
                                 <div className="text-center pb-6 text-gray-500">Prefix any git repository URL with gitpod.io/# or create a new workspace for a recently used project. <a className="text-gray-400 underline underline-thickness-thin underline-offset-small hover:text-gray-600" href="https://www.gitpod.io/docs/getting-started/">Learn more</a></div>
-                                <button onClick={this.showStartWSModal} className="font-medium">New Workspace</button>
+                                <span>
+                                    <button onClick={this.showStartWSModal} className="font-medium">New Workspace</button>
+                                    <button className="ml-2 font-medium border-gray-500 text-gray-500 bg-white hover:bg-gray-100 hover:bg-border-700 hover:text-gray-700">View All Workspaces</button>
+                                </span>
                             </div>
                         </div>
                     </div>
