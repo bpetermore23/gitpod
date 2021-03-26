@@ -258,7 +258,7 @@ function GitProviders() {
     <h2>Manage permissions for git providers.</h2>
         <div className="flex flex-col pt-6 space-y-2">
             {authProviders && authProviders.map(ap => (
-                <div key={"ap-" + ap.authProviderId} className="flex-grow flex flex-row hover:bg-gray-100 rounded-xl h-16 w-full">
+                <div key={"ap-" + ap.authProviderId} className="flex-grow flex flex-row hover:bg-gray-100 rounded-xl h-16 w-full group">
                     <div className="px-4 self-center w-1/12">
                         <div className={"rounded-full w-3 h-3 text-sm align-middle " + (isConnected(ap.authProviderId) ? "bg-green-500" : "bg-gray-400")}>
                             &nbsp;
@@ -276,7 +276,7 @@ function GitProviders() {
                         <span className="my-auto truncate text-gray-500 overflow-ellipsis">{getPermissions(ap.authProviderId)?.join(", ") || "–"}</span>
                         <span className="text-sm my-auto text-gray-400">Permissions</span>
                     </div>
-                    <div className="my-auto flex w-1/12 pl-8 mr-4">
+                    <div className="my-auto flex w-1/12 pl-8 mr-4 opacity-0 group-hover:opacity-100">
                         <div className="self-center hover:bg-gray-200 rounded-md cursor-pointer w-8">
                             <ContextMenu menuEntries={gitProviderMenu(ap)}>
                                 <img className="w-8 h-8 p-1" src={ThreeDots} alt="Actions" />

@@ -181,7 +181,7 @@ export default function EnvVars() {
                             <div className="w-5/12 m-auto">{ev.name}</div>
                             <div className="w-5/12 m-auto text-sm text-gray-400">{ev.repositoryPattern}</div>
                             <div className="w-2/12 flex justify-end">
-                                <div className="flex w-8 self-center hover:bg-gray-200 rounded-md cursor-pointer">
+                                <div className="flex w-8 self-center hover:bg-gray-200 rounded-md cursor-pointer opacity-0 group-hover:opacity-100">
                                     <ContextMenu menuEntries={[
                                         {
                                             title: 'Edit',

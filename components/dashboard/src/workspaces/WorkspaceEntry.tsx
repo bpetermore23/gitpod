@@ -130,7 +130,7 @@ export function WorkspaceEntry({ desc, model }: { desc: WorkspaceInfo, model: Wo
             <div className="flex w-2/12 self-center space-x-2 truncate">
                 <div className="text-sm text-gray-400 truncate">{moment(WorkspaceInfo.lastActiveISODate(desc)).fromNow()}</div>
             </div>
-            <div className="flex w-8 self-center hover:bg-gray-200 rounded-md cursor-pointer">
+            <div className="flex w-8 self-center hover:bg-gray-200 rounded-md cursor-pointer opacity-0 group-hover:opacity-100">
                 <ContextMenu menuEntries={menuEntries}>
                     <img className="w-8 h-8 p-1" src={ThreeDots} alt="Actions" />
                 </ContextMenu>
