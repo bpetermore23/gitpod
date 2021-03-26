@@ -6,6 +6,7 @@
   "dependencies": {
     "@gitpod/gitpod-protocol": "0.1.5",
     "moment": "^2.29.1",
+    "chargebee": "2.4.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
