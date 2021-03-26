@@ -147,18 +147,27 @@ export default function EnvVars() {
             envVar={currentEnvVar}
             validate={validate}
             onClose={() => setAddEnvVarModalVisible(false)} /> : null}
+        <div className="sm:flex sm:items-center sm:justify-between mb-2">
+            <div>
+                <h3>Environment Variables</h3>
+                <h2 className="text-gray-500">Variables are used to store information like passwordsgit .</h2>
+            </div>
+            {envVars.length !== 0
+            ?
+            <div className="mt-3 flex sm:mt-0 sm:ml-4">
+                <button onClick={add} className="ml-2 font-medium">New Variable</button>
+            </div>
+            : null}
+        </div>
         {envVars.length === 0
             ? <div className="bg-gray-100 rounded-xl w-full h-96">
                 <div className="pt-28 flex flex-col items-center w-96 m-auto">
                     <h3 className="text-center pb-3 text-gray-500">No Environment Variables</h3>
                     <div className="text-center pb-6 text-gray-500">In addition to user-specific environment variables you can also pass variables through a workspace creation URL. <a className="text-gray-400 underline underline-thickness-thin underline-offset-small hover:text-gray-600" href="https://www.gitpod.io/docs/environment-variables/#using-the-account-settings">Learn more</a></div>
-                    <button onClick={add} className="font-medium">New Environment Variable</button>
+                    <button onClick={add} className="font-medium">New Variable</button>
                 </div>
             </div>
             : <div className="space-y-2">
-                <div className="flex justify-end mb-2">
-                    <button onClick={add} className="ml-2 font-medium">New Environment Variable</button>
-                </div>
                 <div className="flex flex-col space-y-2">
                     <div className="px-3 py-3 flex justify-between space-x-2 text-sm text-gray-400 border-t border-b border-gray-200">
                         <div className="w-5/12">Name</div>

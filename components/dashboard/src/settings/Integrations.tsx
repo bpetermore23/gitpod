@@ -254,8 +254,8 @@ function GitProviders() {
             </Modal>
         )}
 
-        <h3>Git Providers</h3>
-        <h2>Manage permissions for git providers.</h2>
+    <h3>Git Providers</h3>
+    <h2>Manage permissions for git providers.</h2>
         <div className="flex flex-col pt-6 space-y-2">
             {authProviders && authProviders.map(ap => (
                 <div key={"ap-" + ap.authProviderId} className="flex-grow flex flex-row hover:bg-gray-100 rounded-xl h-16 w-full">
