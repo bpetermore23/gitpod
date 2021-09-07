@@ -23,7 +23,7 @@ require (
 	k8s.io/api v0.20.4
 	k8s.io/apimachinery v0.20.4
 	k8s.io/client-go v0.20.4
-	k8s.io/kubernetes v1.20.4
+	k8s.io/kubernetes v1.20.7
 )
 
 replace github.com/gitpod-io/gitpod/common-go => ../../common-go // leeway
