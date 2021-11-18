@@ -5,15 +5,17 @@ go 1.16
 replace github.com/seccomp/libseccomp-golang => github.com/kinvolk/libseccomp-golang v0.9.2-0.20201113182948-883917843313
 
 require (
-	github.com/containerd/containerd v1.4.1
 	github.com/gitpod-io/gitpod/common-go v0.0.0-00010101000000-000000000000
 	github.com/gitpod-io/gitpod/ws-daemon/api v0.0.0-00010101000000-000000000000
-	github.com/moby/sys/mountinfo v0.4.0
+	github.com/moby/sys/mountinfo v0.4.1
 	github.com/rootless-containers/rootlesskit v0.11.1
 	github.com/seccomp/libseccomp-golang v0.9.1
+	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spf13/cobra v1.1.1
-	golang.org/x/sys v0.0.0-20210113181707-4bcb84eeeb78
+	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect
+	golang.org/x/sys v0.0.0-20210426230700-d19ff857e887
 	google.golang.org/grpc v1.36.0
+	google.golang.org/protobuf v1.27.1 // indirect
 	kernel.org/pub/linux/libs/security/libcap/cap v0.2.46
 )
 
