@@ -15,7 +15,7 @@ require (
 	github.com/alecthomas/jsonschema v0.0.0-20190504002508-159cbd5dba26
 	github.com/alecthomas/repr v0.0.0-20200325044227-4184120f674c
 	github.com/containerd/cgroups v0.0.0-20200824123100-0b889c03f102 // indirect
-	github.com/containerd/containerd v1.4.1
+	github.com/containerd/containerd v1.4.12
 	github.com/containerd/continuity v0.0.0-20210208174643-50096c924a4e // indirect
 	github.com/containerd/fifo v0.0.0-20200410184934-f15a3290365b // indirect
 	github.com/containerd/go-runc v0.0.0-20200930051345-7c5957f67ef4 // indirect
