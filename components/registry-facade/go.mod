@@ -4,13 +4,14 @@ go 1.16
 
 require (
 	github.com/Microsoft/hcsshim v0.8.10 // indirect
-	github.com/containerd/containerd v1.4.1
+	github.com/containerd/containerd v1.4.13
 	github.com/containerd/continuity v0.0.0-20200928162600-f2cc35102c2a // indirect
 	github.com/docker/cli v0.0.0-20200113155311-34d848623701
 	github.com/docker/distribution v2.7.1+incompatible
 	github.com/docker/docker-credential-helpers v0.6.3 // indirect
 	github.com/gitpod-io/gitpod/common-go v0.0.0-00010101000000-000000000000
 	github.com/gitpod-io/gitpod/registry-facade/api v0.0.0-00010101000000-000000000000
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.3
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
@@ -21,7 +22,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.1.0
 	github.com/spf13/cobra v0.0.5
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
+	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
 	golang.org/x/sys v0.0.0-20201112073958-5cba982894dd
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/grpc v1.36.0
