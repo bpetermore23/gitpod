@@ -3,9 +3,7 @@ module github.com/gitpod-io/gitpod/registry-facade
 go 1.16
 
 require (
-	github.com/Microsoft/hcsshim v0.8.10 // indirect
-	github.com/containerd/containerd v1.4.1
-	github.com/containerd/continuity v0.0.0-20200928162600-f2cc35102c2a // indirect
+	github.com/containerd/containerd v1.5.16
 	github.com/docker/cli v0.0.0-20200113155311-34d848623701
 	github.com/docker/distribution v2.7.1+incompatible
 	github.com/docker/docker-credential-helpers v0.6.3 // indirect
@@ -16,16 +14,15 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/hashicorp/golang-lru v0.5.4
 	github.com/opencontainers/go-digest v1.0.0
-	github.com/opencontainers/image-spec v1.0.1
+	github.com/opencontainers/image-spec v1.0.2
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.1.0
-	github.com/spf13/cobra v0.0.5
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/sys v0.0.0-20201112073958-5cba982894dd
+	github.com/prometheus/client_golang v1.7.1
+	github.com/spf13/cobra v1.0.0
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
+	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/grpc v1.36.0
-	gotest.tools/v3 v3.0.3 // indirect
 )
 
 replace github.com/gitpod-io/gitpod/common-go => ../common-go // leeway
